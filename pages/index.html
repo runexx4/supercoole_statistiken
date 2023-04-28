@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="de">
 
 <head>
     <meta charset="utf-8">
@@ -9,6 +9,7 @@
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="stylesheets/style.css">
+    <link id="darkLight" rel="stylesheet" href="stylesheets/lightmode.css">
 </head>
 
 <body>
@@ -17,14 +18,19 @@
         <h4 class="header">Supercoole Statistiken</h4>
         <div class="actions">
             <i data-bs-toggle="modal" data-bs-target="#adminLogin" class="actionItem bi bi-person-fill"></i>
-            <i data-bs-toggle="popover" data-bs-content-id="popover-settings" data-bs-placement="bottom"
-                data-html="true" class="actionItem bi bi-list"></i>
+            <i data-bs-toggle="popover" data-bs-content-id="popover-settings"
+                class="settingsBtn actionItem bi bi-list"></i>
         </div>
     </div>
 
     <!-- Settings -->
     <div id="popover-settings" class="d-none">
-        test
+        <button class="Settings-darkmode-btn" onclick="toggleDarkmode()">
+            Darkmode
+        </button>
+        <button>
+            Datenbank aktualisieren
+        </button>
     </div>
 
     <!-- Admin login modal -->
@@ -60,7 +66,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
         integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous">
     </script>
-    
+    <script src="https://code.jquery.com/jquery-3.6.4.js"
+        integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous">
+    </script>
+
     <script src="javascripts/scripts.js"></script>
 </body>
 

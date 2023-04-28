@@ -29,3 +29,16 @@ body{
 #adminLoginLabel span{
   font-weight: normal;
 }
+
+.popover-arrow::before,  .popover-arrow::after{
+  display: none !important;
+}
+.popover-body {
+  padding: 10px 0;
+}
+.popover-body > * {
+  width: 100%;
+  padding: 0 16px;
+  background: unset;
+  border: unset;
+}
