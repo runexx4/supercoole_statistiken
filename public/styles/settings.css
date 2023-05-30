@@ -1,0 +1,27 @@
+.popover-arrow {
+    visibility: hidden;
+}
+
+.popover-body {
+    padding: 5px 0;
+}
+
+.popover-body div {
+    padding: 5px 10px;
+    cursor: pointer;
+    height: 31px;
+}
+
+.popover-body div:hover {
+    background-color: rgb(230, 230, 230);
+}
+
+.popover-body div:last-child:active {
+    background-color: lightgray;
+}
+
+.form-switch {
+    position: relative;
+    left: 10px;
+    padding: 0 !important;
+}

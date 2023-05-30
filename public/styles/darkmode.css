@@ -1,0 +1,9 @@
+.navbar{
+    color: #212529 !important;
+}
+.navbar-brand{
+    color: #212529 !important;
+}
+.popover-body div:hover {
+    background-color: #424649;
+}

@@ -1,0 +1,7 @@
+.modal-title{
+    font-weight: bold;
+}
+.modal-title span{
+    font-weight: normal;
+    color: lightgray;
+}
