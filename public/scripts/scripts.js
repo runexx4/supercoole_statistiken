@@ -3,6 +3,9 @@ let globalVars = {
 };
 
 $(function () {
+    $("#formular").load("public/pages/formular.html");
+});
+$(function () {
     $("#adminLoginDialog").load("public/pages/admin-login.html");
 });
 $(function () {
@@ -22,6 +25,13 @@ $(function () {
         },
     })
 })
+
+//Beim einloggen den Passwort übergeben
+function einloggen(){
+    var passwort = $('#pass').val();
+console.log(passwort + " -> Passwort")
+
+}
 
 //close Settings on outer click
 $('html').on('mouseup', function (e) {
