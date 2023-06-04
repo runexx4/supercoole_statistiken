@@ -1,23 +1,31 @@
 <div class="modal fade" id="adminLoginModal" tabindex="-1" aria-labelledby="adminLoginModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content" onload="console.log(this)">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="adminLoginModalLabel">Anmeldung <span>Admin</span></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1">
-                        <i class="bi bi-lock-fill"></i>
-                    </span>
-                    <input id="pass" type="password" class="form-control" placeholder="Passwort" aria-label="Passwort"
-                        aria-describedby="basic-addon1">
+            <form id="signIn" onsubmit="einloggen(); return false">
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">
+                            <i class="bi bi-lock-fill"></i>
+                        </span>
+                        <input id="adminPassword" type="password" class="form-control" placeholder="Passwort"
+                            aria-label="Passwort" aria-describedby="basic-addon1">
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+                    <button type="submit" class="btn btn-primary">Anmelden</button>
+                </div>
+            </form>
+
+            <div id="signOut" class="modal-body" style="display: none;">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
-                <button type="button" class="btn btn-primary" onclick="einloggen()">Bestätigen</button>
+                <button type="button" class="btn btn-primary" onclick="ausloggen()">Abmelden</button>
             </div>
+
         </div>
     </div>
 </div>

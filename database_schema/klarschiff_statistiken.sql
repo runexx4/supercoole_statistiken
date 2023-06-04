@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 03. Mrz 2023 um 11:50
+-- Erstellungszeit: 30. Mai 2023 um 17:35
 -- Server-Version: 10.4.24-MariaDB
 -- PHP-Version: 8.1.5
 
@@ -24,22 +24,21 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `categories`
+-- Tabellenstruktur für Tabelle `category`
 --
 
-CREATE TABLE `categories` (
+CREATE TABLE `category` (
   `id` int(11) NOT NULL,
-  `category_name` varchar(100) DEFAULT NULL,
-  `type_id` int(11) DEFAULT NULL
+  `category_name` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `services`
+-- Tabellenstruktur für Tabelle `service`
 --
 
-CREATE TABLE `services` (
+CREATE TABLE `service` (
   `id` int(11) NOT NULL,
   `service_code` int(11) DEFAULT NULL,
   `service_name` varchar(100) DEFAULT NULL,
@@ -50,10 +49,10 @@ CREATE TABLE `services` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `types`
+-- Tabellenstruktur für Tabelle `type`
 --
 
-CREATE TABLE `types` (
+CREATE TABLE `type` (
   `id` int(11) NOT NULL,
   `type_name` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -63,21 +62,21 @@ CREATE TABLE `types` (
 --
 
 --
--- Indizes für die Tabelle `categories`
+-- Indizes für die Tabelle `category`
 --
-ALTER TABLE `categories`
+ALTER TABLE `category`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `services`
+-- Indizes für die Tabelle `service`
 --
-ALTER TABLE `services`
+ALTER TABLE `service`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `types`
+-- Indizes für die Tabelle `type`
 --
-ALTER TABLE `types`
+ALTER TABLE `type`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -85,21 +84,21 @@ ALTER TABLE `types`
 --
 
 --
--- AUTO_INCREMENT für Tabelle `categories`
+-- AUTO_INCREMENT für Tabelle `category`
 --
-ALTER TABLE `categories`
+ALTER TABLE `category`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `services`
+-- AUTO_INCREMENT für Tabelle `service`
 --
-ALTER TABLE `services`
+ALTER TABLE `service`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `types`
+-- AUTO_INCREMENT für Tabelle `type`
 --
-ALTER TABLE `types`
+ALTER TABLE `type`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 

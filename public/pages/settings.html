@@ -1,9 +1,9 @@
 <div id="popover-settings" class="d-none">
-    <div style="display: flex;" onclick="switchDarkmode(this)">
+    <div style="display: flex; width: 167px" onclick="switchDarkmode(this)">
         <span style="width: 100%;">Darkmode</span>
         <div onclick="event.stopPropagation()" class="form-check form-switch">
             <input class="form-check-input darkmodeSwitch" type="checkbox" role="switch" id="darkmodeSwitch">
         </div>
     </div>
-    <div>Datenbank aktualisieren</div>
+    <div id="settingUpdate" onclick="updateDataBase()">Datenbank aktualisieren</div>
 </div>

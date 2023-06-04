@@ -1,46 +1,58 @@
-function updateDataBase(res) {
-    var mysql = require("./mysql");
-    var XMLHttpRequest = require('xhr2');
+var auth = require("./authentication.js");
 
-    const xhttp = new XMLHttpRequest();
-    xhttp.onload = function () {
+function updateDataBase() {
+    return new Promise(async(resolve, reject) => {
+        var mysql = require("./mysql");
+        var XMLHttpRequest = require('xhr2');
 
-        let response = JSON.parse(this.responseText);
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function () {
 
-        let service = [];
-        let category = [];
-        let type = [];
+            let response = JSON.parse(this.responseText);
 
-        // console.log(response);
-        response.forEach(element => {
-            if (!service.includes({
-                    'service_code': element.service_code,
-                    'service_name': element.service_name
-                })) {
-                service.push({
-                    'service_code': element.service_code,
-                    'service_name': element.service_name
+            let service = [];
+            let category = [];
+            let type = [];
+
+            // console.log(response);
+            response.forEach(element => {
+                if (!service.some(subArr => JSON.stringify(subArr) === JSON.stringify([element.service_name, element.service_code, element.category, element.type]))) {
+                    service.push([element.service_name, element.service_code, element.category, element.type]);
+                }
+                if (!category.some(subArr => JSON.stringify(subArr) === JSON.stringify([element.category]))) {
+                    category.push([element.category]);
+                }
+                if (!type.some(subArr => JSON.stringify(subArr) === JSON.stringify([element.type]))) {
+                    type.push([element.type]);
+                }
+            });
+
+            (async () => {
+                await mysql.connect();
+                console.log("Connected!");
+
+                await mysql.update({
+                    service: service,
+                    category: category,
+                    type: type
                 });
-            }
-            if (!category.includes(element.category)) {
-                category.push(element.category);
-            }
-            if (!type.some(subArr => JSON.stringify(subArr) === JSON.stringify([element.type]))) {
-                type.push([element.type]);
-            }
-        });
+                console.log("Update finished!");
 
-        mysql.connect();
+                await mysql.disconnect();
+                console.log("Connection closed!");
+            })();
 
-        mysql.update({service: service, category: category, type: type});
+            resolve({
+                service: service,
+                category: category,
+                type: type
+            });
 
-        mysql.disconnect();
+        }
+        xhttp.open("GET", "https://www.klarschiff-sn.de/services.json");
+        xhttp.send();
+    })
 
-
-        //   res.send(JSON.parse(this.responseText).service);
-    }
-    xhttp.open("GET", "https://www.klarschiff-sn.de/services.json");
-    xhttp.send();
 }
 
 module.exports = updateDataBase;

@@ -6,6 +6,11 @@
     padding: 5px 0;
 }
 
+.popover {
+    transform: unset !important;
+    inset: 55px 12px auto auto !important;
+}
+
 .popover-body div {
     padding: 5px 10px;
     cursor: pointer;

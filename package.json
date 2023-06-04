@@ -7,8 +7,14 @@
     "watch": "nodemon --ext *"
   },
   "dependencies": {
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.2",
     "chart.js": "^4.2.1",
-    "express": "~4.16.1"
+    "cookie-parser": "^1.4.6",
+    "express": "~4.16.1",
+    "express-session": "^1.17.3",
+    "mysql": "^2.18.1",
+    "xhr2": "^0.2.1"
   },
   "devDependencies": {
     "connect-livereload": "^0.6.1",
