@@ -1,6 +1,15 @@
 @import url(admin-login.css);
 @import url(settings.css);
 
+html {
+    height: 100%;
+}
+body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
 .navbar{
     color: white !important;
 }

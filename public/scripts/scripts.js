@@ -9,7 +9,14 @@ if (getCookie("darkmode") === "true") {
 }
 
 $(function () {
-    $("#formular").load("public/pages/formular.html");
+    $("#formular").load("public/pages/formular.html", () => {
+        $('input[name="daterange"]').daterangepicker({
+            locale: {
+                format: 'DD.MM.YYYY'
+            }
+        });
+
+    });
 });
 $(function () {
     $("#adminLoginDialog").load("public/pages/admin-login.html", () => {
