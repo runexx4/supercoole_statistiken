@@ -19,8 +19,11 @@ $(function () {
     $("#formular").load("public/pages/formular.html", () => {
         $('input[name="daterange"]').daterangepicker({
             locale: {
-                format: 'DD.MM.YYYY'
-            }
+                format: 'DD.MM.YYYY',
+                applyLabel: "Übernehmen",
+                cancelLabel: "Abbrechen"
+            },
+            cancelClass: "btn-secondary",
         });
 
     });

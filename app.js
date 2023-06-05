@@ -26,9 +26,6 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(session({
   secret: "Shh, its a secret!",
-  // cookie: {
-  //   maxAge: 30 * 60000
-  // },
   resave: true,
   saveUninitialized: true
 }));

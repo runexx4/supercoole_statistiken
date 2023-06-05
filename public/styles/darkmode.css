@@ -7,3 +7,42 @@
 .popover-body div:hover {
     background-color: #424649;
 }
+.daterangepicker {
+    background-color: #212529 !important;
+    border-color: #495057 !important;
+}
+.daterangepicker::before {
+    border-bottom-color: #495057 !important;
+}
+.daterangepicker::after {
+    border-bottom-color: #212529 !important;
+}
+.daterangepicker .calendar-table {
+    background-color: #212529 !important;
+    border-color: transparent !important;
+}
+.daterangepicker .drp-buttons{
+    border-color: #495057 !important;
+}
+.daterangepicker td.off {
+    background-color: #212529 !important;
+}
+.daterangepicker td.available:hover {
+    background-color: #424649 !important;
+}
+.daterangepicker td.in-range:not(.off) {
+    background-color: #264959 !important;
+    color: white !important;
+}
+.daterangepicker td.available.start-date:not(.off), .daterangepicker td.in-range.end-date:not(.off) {
+    background-color: #0d6efd !important;
+}
+.daterangepicker .prev:hover, .daterangepicker .next:hover {
+    background-color: #424649 !important;
+}
+.daterangepicker .prev span, .daterangepicker .next span {
+    border-color: #adb5bd !important;
+}
+#settingUpdate:active {
+    background-color: #34373a;
+}

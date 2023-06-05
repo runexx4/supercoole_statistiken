@@ -8,6 +8,9 @@ var auth = require("./authentication.js");
 // define the home page route
 router.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, 'public/pages/index.html'));
+    if(!req.session.authorized){
+        res.cookie('auth', false);
+    }
 });
 
 router.get('/update-database', function (req, res) {
