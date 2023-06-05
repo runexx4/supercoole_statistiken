@@ -7,6 +7,13 @@ if (getCookie("darkmode") === "true") {
     darkmodeStyle.href = "";
     htmlElem.setAttribute("data-bs-theme", "light");
 }
+if (getCookie("auth") === "true") {
+    $('#loginIcon').addClass("bi-person-fill-check");
+    $('#loginIcon').removeClass("bi-person-fill");
+} else {
+    $('#loginIcon').removeClass("bi-person-fill-check");
+    $('#loginIcon').addClass("bi-person-fill");
+}
 
 $(function () {
     $("#formular").load("public/pages/formular.html", () => {
@@ -91,6 +98,8 @@ function updateDataBase() {
         if (this.responseText === "not authorised!") {
             console.log("not authorised!");
         } else {
+
+            
             console.log("Updated");
         }
     }
@@ -113,6 +122,9 @@ function einloggen() {
             $('#settingUpdate').show();
 
             $("#adminLoginModal").modal('hide');
+
+            $('#loginIcon').addClass("bi-person-fill-check");
+            $('#loginIcon').removeClass("bi-person-fill");
         }
     }
 
@@ -130,6 +142,9 @@ function ausloggen() {
         $('#settingUpdate').hide();
 
         $("#adminLoginModal").modal('hide');
+
+        $('#loginIcon').removeClass("bi-person-fill-check");
+        $('#loginIcon').addClass("bi-person-fill");
     }
 
     xhttp.open("POST", "/auth", true);
