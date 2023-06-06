@@ -101,6 +101,7 @@ function switchDarkmode(elem) {
 }
 
 function updateDataBase() {
+    $('.settings-popver #dbUpdateSpinner').css('visibility', 'visible');
     const xhttp = new XMLHttpRequest();
 
     xhttp.onload = function () {
@@ -111,6 +112,7 @@ function updateDataBase() {
             const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
             toastBootstrap.show();
         }
+        $('.settings-popver #dbUpdateSpinner').css('visibility', 'hidden');
     }
 
     xhttp.open("GET", `/update-database`);
@@ -126,8 +128,11 @@ function einloggen() {
     xhttp.onload = function () {
         const success = this.responseText;
         if (success === "true") {
-            $('#signIn').hide();
-            $('#signOut').show();
+            setTimeout(() => {
+                $('#signIn').hide();
+                $('#signOut').show();
+            }, 250);
+
             $('#settingUpdate').show();
 
             $("#adminLoginModal").modal('hide');
@@ -150,8 +155,10 @@ function ausloggen() {
     const xhttp = new XMLHttpRequest();
 
     xhttp.onload = function () {
-        $('#signIn').show();
-        $('#signOut').hide();
+        setTimeout(() => {
+            $('#signIn').show();
+            $('#signOut').hide();
+        }, 250);
         $('#settingUpdate').hide();
 
         $("#adminLoginModal").modal('hide');
