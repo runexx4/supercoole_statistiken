@@ -48,6 +48,12 @@ $(function () {
         }
     });
 });
+$(function () {
+    $("#toasts").load("public/pages/toasts.html", () => {
+
+    });
+});
+
 $("[data-bs-toggle='popover']").on('show.bs.popover', function (test) {
     $("#darkmodeSwitch").attr("checked", getCookie("darkmode") === "true" ? true : false);
 });
@@ -101,9 +107,9 @@ function updateDataBase() {
         if (this.responseText === "not authorised!") {
             console.log("not authorised!");
         } else {
-
-            
-            console.log("Updated");
+            const toastLiveExample = document.getElementById('dbUpdated')
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+            toastBootstrap.show();
         }
     }
 
@@ -128,6 +134,10 @@ function einloggen() {
 
             $('#loginIcon').addClass("bi-person-fill-check");
             $('#loginIcon').removeClass("bi-person-fill");
+        } else {
+            const toastLiveExample = document.getElementById('wrongPw')
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+            toastBootstrap.show();
         }
     }
 
