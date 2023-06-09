@@ -2,6 +2,7 @@ let globalVars = {
     darkmodeStyle: document.getElementById("darkmodeStyleSheet"),
     htmlElem: document.getElementById("html"),
     serviceData: null,
+    filteredServices: []
 }
 
 if (getCookie("darkmode") === "true") {
@@ -188,6 +189,153 @@ function test() {
     console.log($('#signIn'));
 }
 
+function getServiceData() {
+    return new Promise((resolve, reject) => {
+        const xhttp = new XMLHttpRequest();
+
+        xhttp.onload = function () {
+            resolve(JSON.parse(this.responseText));
+        }
+        xhttp.open("GET", `/services`);
+        xhttp.send();
+    })
+}
+
+async function setFormularData() {
+    if (!globalVars.serviceData) {
+        globalVars.serviceData = await getServiceData();
+        globalVars.filteredServices = globalVars.serviceData.services;
+    }
+    globalVars.serviceData.service.forEach(service => {
+        $('#selectService').append($('<option>', {
+            value: JSON.stringify(service),
+            text: service.service_name
+        }));
+    });
+    globalVars.serviceData.category.forEach(category => {
+        $('#selectCategory').append($('<option>', {
+            value: category.id,
+            text: category.category_name
+        }));
+    });
+    globalVars.serviceData.type.forEach(type => {
+        $('#selectType').append($('<option>', {
+            value: type.id,
+            text: type.type_name
+        }));
+    });
+}
+
+function requestFilter() {
+
+    let selectType = $("#selectType").val();
+    let selectCategory = $("#selectCategory").val();
+    let selectService = $("#selectService").val() !== "all" ? JSON.parse($("#selectService").val()) : $("#selectService").val();
+    let selectTimeinterval = $("#selectTimeinterval").val();
+
+    filterForm(selectType, selectCategory);
+
+    console.log(selectType, selectCategory, selectService, selectTimeinterval);
+
+    const xhttp = new XMLHttpRequest();
+
+    xhttp.onload = function () {
+        const requests = JSON.parse(this.responseText);
+
+        let filteredRequests = [];
+        globalVars.filteredServices.forEach(service => {
+            let filterArray = requests.filter((request) => {
+                return request.serviceCode == service.service_code;
+            })
+
+            if (filterArray.length > 0) {
+                filteredRequests.push(filterArray);
+            }
+        });
+
+        setCharts(filteredRequests);
+    }
+
+    xhttp.open("GET", `/requests`);
+    xhttp.send();
+}
+
+function filterForm(selectTypeId, selectCategoryId) {
+    if (selectTypeId === "all") {
+        $("#selectCategory").prop("disabled", true);
+        $("#selectService").prop("disabled", true);
+
+        $("#selectCategory").val("all");
+        $("#selectService").val("all");
+    } else {
+        $("#selectCategory").prop("disabled", false);
+        $("#selectService").prop("disabled", false);
+
+        if (selectTypeId === "all") {
+            $('#selectService option').each(function () {
+                $(this).show();
+            })
+            globalVars.filteredServices = globalVars.serviceData.services;
+        } else {
+            $('#selectCategory option:not([value=all])').hide();
+            globalVars.filteredServices = [];
+
+            $('#selectService option').each(function () {
+                if ($(this).val() === "all") return;
+
+                const serviceVal = JSON.parse($(this).val());
+
+                if (serviceVal.type_id == selectTypeId && (selectCategoryId === "all" || serviceVal.category_id == selectCategoryId)) {
+                    $(this).show();
+                    globalVars.filteredServices.push(serviceVal);
+                } else {
+                    $(this).hide();
+                }
+
+                if (serviceVal.type_id == selectTypeId) {
+                    $(`#selectCategory option[value=${serviceVal.category_id}]`).show();
+                }
+            });
+
+        }
+    }
+
+}
+
+function setCharts(filteredRequests) {
+
+    filteredRequests.sort(function (a, b) {
+        return b.length - a.length;
+    });
+    console.log(filteredRequests);
+
+    let labels = [];
+    let data = [];
+    let sonstigeSize = 0;
+    filteredRequests.forEach((filteredRequest, i) => {
+        if(i < 5){
+            labels.push(filteredRequest[0].serviceName);
+            data.push(filteredRequest.length);
+        }else{
+            if(!labels.includes("Sonstige")){
+                labels.push("Sonstige")
+            }
+            sonstigeSize += filteredRequest.length;
+        }
+    });
+    if(sonstigeSize > 0){
+        data.push(sonstigeSize);
+    }
+
+    const ctx2 = Chart.getChart("chart2");
+    ctx2.data.labels = labels;
+    ctx2.data.datasets.forEach((dataset) => {
+        dataset.data = data;
+    });
+    ctx2.update();
+
+}
+
 const ctx = document.getElementById('chart1');
 new Chart(ctx, {
     type: 'bar',
@@ -255,107 +403,3 @@ new Chart(ctx3, {
 
 
 });
-
-function getServiceData() {
-    return new Promise((resolve, reject) => {
-        const xhttp = new XMLHttpRequest();
-
-        xhttp.onload = function () {
-            resolve(JSON.parse(this.responseText));
-        }
-        xhttp.open("GET", `/services`);
-        xhttp.send();
-    })
-}
-
-async function setFormularData() {
-    if (!globalVars.serviceData) {
-        globalVars.serviceData = await getServiceData();
-    }
-    globalVars.serviceData.service.forEach(service => {
-        $('#selectService').append($('<option>', {
-            value: JSON.stringify(service),
-            text: service.service_name
-        }));
-    });
-    globalVars.serviceData.category.forEach(category => {
-        $('#selectCategory').append($('<option>', {
-            value: category.id,
-            text: category.category_name
-        }));
-    });
-    globalVars.serviceData.type.forEach(type => {
-        $('#selectType').append($('<option>', {
-            value: type.id,
-            text: type.type_name
-        }));
-    });
-}
-
-function requestFilter() {
-
-    let selectType = $("#selectType").val();
-    let selectCategory = $("#selectCategory").val();
-    let selectService = $("#selectService").val();
-    let selectTimeinterval = $("#selectTimeinterval").val();
-
-    filterForm(selectType, selectCategory, selectService);
-
-    // console.log(selectType, selectCategory, selectService, selectTimeinterval);
-
-    // const xhttp = new XMLHttpRequest();
-
-    // xhttp.onload = function () {
-    //     const requests = JSON.parse(this.responseText);
-
-    //     let filteredRequests = requests.filter((request) => {
-    //         return request.serviceCode === 433;
-    //     })
-
-    //     console.log(filteredRequests);
-    // }
-
-    // xhttp.open("GET", `/requests`);
-    // xhttp.send();
-}
-
-function filterForm(selectTypeId, selectCategoryId, selectService) {
-    if (selectTypeId === "all") {
-        $("#selectCategory").prop("disabled", true);
-        $("#selectService").prop("disabled", true);
-
-        $("#selectCategory").val("all");
-        $("#selectService").val("all");
-    } else {
-        $("#selectCategory").prop("disabled", false);
-        $("#selectService").prop("disabled", false);
-
-        let filteredServices;
-        if (selectTypeId === "all") {
-            filteredServices = globalVars.serviceData.service;
-
-            $('#selectService option').each(function () {
-                $(this).show();
-            })
-        } else {
-            $('#selectCategory option:not([value=all])').hide();
-            $('#selectService option').each(function () {
-                if ($(this).val() === "all") return;
-
-                const serviceVal = JSON.parse($(this).val());
-
-                if (serviceVal.type_id == selectTypeId && (selectCategoryId === "all" || serviceVal.category_id == selectCategoryId)) {
-                    $(this).show()
-                } else {
-                    $(this).hide()
-                }
-
-                if (serviceVal.type_id == selectTypeId) {
-                    $(`#selectCategory option[value=${serviceVal.category_id}]`).show();
-                }
-            });
-
-        }
-    }
-
-}
