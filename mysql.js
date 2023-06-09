@@ -114,9 +114,9 @@ function disconnect() {
 
 function getServices() {
     return new Promise(async(resolve, reject) => {
-        const serviceSQL = "SELECT Service_Code, Service_Name FROM Service ";
-        const categorySQL = "SELECT Category_Name FROM Category ";
-        const typeSQL = "SELECT Type_Name FROM Type ";
+        const serviceSQL = "SELECT service_code, service_name, category_id, type_id FROM service ";
+        const categorySQL = "SELECT id, category_name FROM category ";
+        const typeSQL = "SELECT id, type_name FROM Type ";
 
         let serviceObj = {}
 

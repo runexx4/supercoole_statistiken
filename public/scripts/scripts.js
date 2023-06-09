@@ -1,12 +1,15 @@
-let darkmodeStyle = document.getElementById("darkmodeStyleSheet");
-let htmlElem = document.getElementById("html");
-let serviceData;
+let globalVars = {
+    darkmodeStyle: document.getElementById("darkmodeStyleSheet"),
+    htmlElem: document.getElementById("html"),
+    serviceData: null,
+}
+
 if (getCookie("darkmode") === "true") {
-    darkmodeStyle.href = "public/styles/darkmode.css";
-    htmlElem.setAttribute("data-bs-theme", "dark");
+    globalVars.darkmodeStyle.href = "public/styles/darkmode.css";
+    globalVars.htmlElem.setAttribute("data-bs-theme", "dark");
 } else {
-    darkmodeStyle.href = "";
-    htmlElem.setAttribute("data-bs-theme", "light");
+    globalVars.darkmodeStyle.href = "";
+    globalVars.htmlElem.setAttribute("data-bs-theme", "light");
 }
 if (getCookie("auth") === "true") {
     $('#loginIcon').addClass("bi-person-fill-check");
@@ -96,14 +99,12 @@ function switchDarkmode(elem) {
 
     elem.querySelector("#darkmodeSwitch").checked = getCookie("darkmode") === "true" ? true : false;
 
-    let darkmodeStyle = document.getElementById("darkmodeStyleSheet");
-    let htmlElem = document.getElementById("html");
     if (getCookie("darkmode") === "true") {
-        darkmodeStyle.href = "public/styles/darkmode.css";
-        htmlElem.setAttribute("data-bs-theme", "dark");
+        globalVars.darkmodeStyle.href = "public/styles/darkmode.css";
+        globalVars.htmlElem.setAttribute("data-bs-theme", "dark");
     } else {
-        darkmodeStyle.href = "";
-        htmlElem.setAttribute("data-bs-theme", "light");
+        globalVars.darkmodeStyle.href = "";
+        globalVars.htmlElem.setAttribute("data-bs-theme", "light");
     }
 }
 
@@ -255,36 +256,40 @@ new Chart(ctx3, {
 
 });
 
-function setFormularData() {
+function getServiceData() {
+    return new Promise((resolve, reject) => {
+        const xhttp = new XMLHttpRequest();
 
-    const xhttp = new XMLHttpRequest();
+        xhttp.onload = function () {
+            resolve(JSON.parse(this.responseText));
+        }
+        xhttp.open("GET", `/services`);
+        xhttp.send();
+    })
+}
 
-    xhttp.onload = function () {
-        const services = JSON.parse(this.responseText);
-
-        services.service.forEach(service => {
-            $('#selectService').append($('<option>', {
-                value: service.Service_Code,
-                text: service.Service_Name
-            }));
-        });
-        services.category.forEach(category => {
-            $('#selectCategory').append($('<option>', {
-                value: category.Category_Name,
-                text: category.Category_Name
-            }));
-        });
-        services.type.forEach(type => {
-            $('#selectType').append($('<option>', {
-                value: type.Type_Name,
-                text: type.Type_Name
-            }));
-        });
-
+async function setFormularData() {
+    if (!globalVars.serviceData) {
+        globalVars.serviceData = await getServiceData();
     }
-
-    xhttp.open("GET", `/services`);
-    xhttp.send();
+    globalVars.serviceData.service.forEach(service => {
+        $('#selectService').append($('<option>', {
+            value: JSON.stringify(service),
+            text: service.service_name
+        }));
+    });
+    globalVars.serviceData.category.forEach(category => {
+        $('#selectCategory').append($('<option>', {
+            value: category.id,
+            text: category.category_name
+        }));
+    });
+    globalVars.serviceData.type.forEach(type => {
+        $('#selectType').append($('<option>', {
+            value: type.id,
+            text: type.type_name
+        }));
+    });
 }
 
 function requestFilter() {
@@ -296,7 +301,7 @@ function requestFilter() {
 
     filterForm(selectType, selectCategory, selectService);
 
-    console.log(selectType, selectCategory, selectService, selectTimeinterval);
+    // console.log(selectType, selectCategory, selectService, selectTimeinterval);
 
     // const xhttp = new XMLHttpRequest();
 
@@ -314,18 +319,43 @@ function requestFilter() {
     // xhttp.send();
 }
 
-function filterForm(selectType, selectCategory, selectService) {
-    if (selectType === "alle") {
+function filterForm(selectTypeId, selectCategoryId, selectService) {
+    if (selectTypeId === "all") {
         $("#selectCategory").prop("disabled", true);
         $("#selectService").prop("disabled", true);
 
-        $("#selectCategory").val("alle");
-        $("#selectService").val("alle");
+        $("#selectCategory").val("all");
+        $("#selectService").val("all");
     } else {
         $("#selectCategory").prop("disabled", false);
         $("#selectService").prop("disabled", false);
 
+        let filteredServices;
+        if (selectTypeId === "all") {
+            filteredServices = globalVars.serviceData.service;
 
+            $('#selectService option').each(function () {
+                $(this).show();
+            })
+        } else {
+            $('#selectCategory option:not([value=all])').hide();
+            $('#selectService option').each(function () {
+                if ($(this).val() === "all") return;
+
+                const serviceVal = JSON.parse($(this).val());
+
+                if (serviceVal.type_id == selectTypeId && (selectCategoryId === "all" || serviceVal.category_id == selectCategoryId)) {
+                    $(this).show()
+                } else {
+                    $(this).hide()
+                }
+
+                if (serviceVal.type_id == selectTypeId) {
+                    $(`#selectCategory option[value=${serviceVal.category_id}]`).show();
+                }
+            });
+
+        }
     }
 
 }

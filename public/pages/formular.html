@@ -4,8 +4,8 @@
         <tr>
             <td>
                 <label for="typ">Typ</label>
-                <select id="selectType" class="form-select" aria-label="Default select example" onchange="requestFilter()">
-                    <option value="alle">Alle</option>
+                <select id="selectType" class="form-select" aria-label="Default select example" onchange="requestFilter(); $('#selectCategory').val('all');">
+                    <option value="all">Alle</option>
                 </select>
             </td>
         </tr>
@@ -13,7 +13,7 @@
             <td>
                 <label for="kategorie">Kategorie</label>
                 <select id="selectCategory" class="form-select" aria-label="Default select example" onchange="requestFilter()" disabled>
-                    <option value="alle">Alle</option>
+                    <option value="all">Alle</option>
                 </select>
             </td>
         </tr>
@@ -21,7 +21,7 @@
             <td>
                 <label for="services">Services</label>
                 <select id="selectService" class="form-select" aria-label="Default select example" onchange="requestFilter()" disabled>
-                    <option value="alle">Alle</option>
+                    <option value="all">Alle</option>
                 </select>
             </td>
         </tr>
