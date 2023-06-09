@@ -35,13 +35,6 @@ function update(resultObj) {
             if (err) throw err;
             console.log(`${result.affectedRows} types added`);
 
-            // update category
-
-
-            // resultObj.category.forEach(category => {
-            //     category[1] = typeObject[category[1]];
-            // });
-
             var sql = "INSERT INTO category (category_name) VALUES ?";
             var values = resultObj.category;
             connection.query('DELETE FROM  category;', function (err, rows, fields) {
@@ -119,8 +112,36 @@ function disconnect() {
     });
 }
 
+function getServices() {
+    return new Promise(async(resolve, reject) => {
+        const serviceSQL = "SELECT Service_Code, Service_Name FROM Service ";
+        const categorySQL = "SELECT Category_Name FROM Category ";
+        const typeSQL = "SELECT Type_Name FROM Type ";
+
+        let serviceObj = {}
+
+        connection.query(serviceSQL, [], function (err, result) {
+            serviceObj.service = result;
+
+            connection.query(categorySQL, [], function (err, result) {
+                serviceObj.category = result;
+
+                connection.query(typeSQL, [], function (err, result) {
+                    serviceObj.type = result;
+
+                    resolve(serviceObj);
+                })
+            })
+        })
+        
+        // var values = resultObj.type;
+
+    })
+}
+
 module.exports = {
     connect,
     update,
-    disconnect
+    disconnect,
+    getServices
 };

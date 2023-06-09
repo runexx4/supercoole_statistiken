@@ -1,5 +1,3 @@
-var auth = require("./authentication.js");
-
 function updateDataBase() {
     return new Promise(async(resolve, reject) => {
         var mysql = require("./mysql");

@@ -1,5 +1,6 @@
 let darkmodeStyle = document.getElementById("darkmodeStyleSheet");
 let htmlElem = document.getElementById("html");
+let serviceData;
 if (getCookie("darkmode") === "true") {
     darkmodeStyle.href = "public/styles/darkmode.css";
     htmlElem.setAttribute("data-bs-theme", "dark");
@@ -25,6 +26,12 @@ $(function () {
             },
             cancelClass: "btn-secondary",
         });
+
+        $(".applyBtn").on("click", function () {
+            requestFilter();
+        });
+
+        setFormularData();
 
     });
 });
@@ -174,6 +181,7 @@ function ausloggen() {
 
 
 
+
 function test() {
     console.log(document.cookie);
     console.log($('#signIn'));
@@ -243,4 +251,81 @@ new Chart(ctx3, {
         responsive: true,
         maintainAspectRatio: true,
     },
+
+
 });
+
+function setFormularData() {
+
+    const xhttp = new XMLHttpRequest();
+
+    xhttp.onload = function () {
+        const services = JSON.parse(this.responseText);
+
+        services.service.forEach(service => {
+            $('#selectService').append($('<option>', {
+                value: service.Service_Code,
+                text: service.Service_Name
+            }));
+        });
+        services.category.forEach(category => {
+            $('#selectCategory').append($('<option>', {
+                value: category.Category_Name,
+                text: category.Category_Name
+            }));
+        });
+        services.type.forEach(type => {
+            $('#selectType').append($('<option>', {
+                value: type.Type_Name,
+                text: type.Type_Name
+            }));
+        });
+
+    }
+
+    xhttp.open("GET", `/services`);
+    xhttp.send();
+}
+
+function requestFilter() {
+
+    let selectType = $("#selectType").val();
+    let selectCategory = $("#selectCategory").val();
+    let selectService = $("#selectService").val();
+    let selectTimeinterval = $("#selectTimeinterval").val();
+
+    filterForm(selectType, selectCategory, selectService);
+
+    console.log(selectType, selectCategory, selectService, selectTimeinterval);
+
+    // const xhttp = new XMLHttpRequest();
+
+    // xhttp.onload = function () {
+    //     const requests = JSON.parse(this.responseText);
+
+    //     let filteredRequests = requests.filter((request) => {
+    //         return request.serviceCode === 433;
+    //     })
+
+    //     console.log(filteredRequests);
+    // }
+
+    // xhttp.open("GET", `/requests`);
+    // xhttp.send();
+}
+
+function filterForm(selectType, selectCategory, selectService) {
+    if (selectType === "alle") {
+        $("#selectCategory").prop("disabled", true);
+        $("#selectService").prop("disabled", true);
+
+        $("#selectCategory").val("alle");
+        $("#selectService").val("alle");
+    } else {
+        $("#selectCategory").prop("disabled", false);
+        $("#selectService").prop("disabled", false);
+
+
+    }
+
+}
